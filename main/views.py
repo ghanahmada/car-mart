@@ -1,15 +1,25 @@
 from django.shortcuts import render
 
 # Create your views here.
-def show_main(request):
+def show_author(request):
     context = {
-        'name': 'Mazda 3 2021',
-        'amount': 10,
-        'price': 400000000,
-        'category': 'SUV',
-        'description':"""Mazda 3 2021 adalah salah satu model mobil kompak yang populer dari produsen otomotif Jepang, 
-                        Mazda. Mobil ini telah mendapatkan banyak pengakuan atas desainnya yang elegan, kualitas bahan 
-                        yang baik, serta pengalaman mengemudi yang memuaskan. """
+        "name": "Ghana Ahmada Yudistira",
+        "class": "PBP B"
+    }
+    return render(request, "author.html", context)
+
+def show_content(request):
+    context = {
+        'name': 'Porsche 918 Spyder',
+        'amount': 918,
+        'price': 1144000,
+        'category': 'Sports Car',
+        'description':"""The Porsche 918 Spyder stands out as a car with dual personalities. 
+        It's a speed demon with a V8 engine and electric motors working together, dishing out 
+        over 880 horsepower for an exhilarating ride. When you want to be eco-conscious, it's 
+        got an electric mode for silent, emissions-free cruising. This car seamlessly combines 
+        high-performance thrills and environmental responsibility, reflecting Porsche's dedication 
+        to both power and the planet. """
     }
 
-    return render(request, "main.html", context)
+    return render(request, "content.html", context)

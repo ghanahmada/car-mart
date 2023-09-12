@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-200 p-4">
+
+    <h1 class="bg-gray-800 text-white py-2 text-2xl text-center mb-4">Product Details</h1>
+
+    <div class="mx-4">
+        <h5 class="text-lg font-semibold text-gray-700 mt-4">Name:</h5>
+        <p class="text-gray-600">{{ name }}</p>
+
+        <h5 class="text-lg font-semibold text-gray-700 mt-4">Amount:</h5>
+        <p class="text-gray-600">{{ amount }}</p>
+
+        <h5 class="text-lg font-semibold text-gray-700 mt-4">Price:</h5>
+        <p class="text-gray-600">USD {{ price }}</p>
+
+        <h5 class="text-lg font-semibold text-gray-700 mt-4">Category:</h5>
+        <p class="text-gray-600">{{ category }}</p>
+
+        <h5 class="text-lg font-semibold text-gray-700 mt-4">Description:</h5>
+        <p class="text-gray-600">{{ description }}</p>
+    </div>
+
+</body>
+</html>
