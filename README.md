@@ -8,7 +8,219 @@
 
 **Link aplikasi**: *https://car-mart.adaptable.app/main/* 
 
-## Pengerjaan Aplikasi  
+## Tugas 3
+### Perbedaan antara form `POST` dan `GET` dalam Django
+`POST` digunakan untuk mengirim data ke server untuk diproses. Ini tidak idempoten, yang berarti setiap kali dipanggil, dapat membuat sumber daya baru atau mengubah yang sudah ada. Permintaan `POST` biasanya digunakan untuk membuat atau memperbarui data, seperti mengirimkan formulir atau mengunggah file. 
+
+```python
+def registration(request):
+    if request.method == 'POST':
+        # Proses data formulir yang dikirim oleh pengguna
+        # ...
+```
+
+`GET` digunakan untuk mengambil data dari server tanpa mengubahnya. Metode ini dianggap aman dan idempoten, yang berarti dapat dipanggil berkali-kali tanpa mengubah hasilnya. Permintaan `GET` biasanya digunakan untuk mengambil data untuk ditampilkan di halaman web, seperti daftar produk atau artikel.
+```python
+def search(request):
+    query = request.GET.get('q')
+    # Misal mencari data yang sesuai dari hasil query
+    # ...
+```
+
+### Perbedaan antara XML, JSON, dan HTML dalam pengiriman data
+XML atau Extensible Markup Language memiliki struktur tag yang sangat deskriptif sehingga biasa digunakan untuk representasi data secara terstruktur. XML memiliki tag yang ditulis dalam `<>` untuk mendeskripsikan secara singkat konten yang disimpan.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<django-objects version="1.0">
+    <object model="main.item" pk="2">
+        <field name="name" type="CharField">Mazda 3 Hatchback</field>
+        <field name="amount" type="IntegerField">50000</field>
+        <field name="price" type="IntegerField">32000</field>
+        <field name="category" type="CharField">Compact</field>
+        <field name="description" type="TextField">mobil jepang premium</field>
+        <field name="date_added" type="DateField">2023-09-17</field>
+    </object>
+</django-objects>
+```
+
+JSON atau JavaScript Object Notation memiliki struktur seperti `dictionary` dengan pasangan `key:value` yang dapat disimpan dalam `list`. Data yang disimpan dalam format JSON lebih ringkas dan mudah dibaca sehingga cocok digunakan untuk pertukaran data terstruktur antara server dengan klien web.
+```json
+[
+    {
+        "model": "main.item",
+        "pk": 2,
+        "fields": {
+            "name": "Mazda 3 Hatchback",
+            "amount": 50000,
+            "price": 32000,
+            "category": "Compact",
+            "description": "mobil jepang premium",
+            "date_added": "2023-09-17"
+        }
+    }
+]
+```
+
+HTML atau Hypertext Markup Language adalah bahasa markup yang digunakan untuk mengorganisir dan menampilkan data pada halaman web kepada pengguna akhir. Contoh elemen yang dapat ditampilkan dengan HTML adalah teks, gambar, dan tautan.
+
+```html
+<div class="m-4">
+    <div class="text-lg">
+        <p><strong>Nama:</strong> {{ name }}</p>
+        <p><strong>Kelas:</strong> {{ class }}</p>
+    </div>
+</div>
+```
+
+### Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
+JSON sering digunakan dalam pertukaran data antara aplikasi web modern karena memiliki format yang ringkas dan mudah dibaca sehingga *developer* tidak kesulitan memahami struktur data JSON ketimbang strukur data lainnya serta lebih efisien dalam hal ukuran penyimpanan data.
+
+### Implementasi Form dan Data Delivery pada Django
+### 1. Membuat input `form` untuk menambahkan objek model pada app sebelumnya
+saya membuat berkas `forms.py` pada direktori `main` yang akan mengimplementasikan library `django.forms` untuk menyederhanakan proses pembuatan `form` dalam Django.
+
+```python
+from django.forms import ModelForm
+from main.models import Item
+
+class ItemForm(ModelForm):
+    class Meta:
+        model = Item
+        fields = ["name", "amount", "price", "category", "description"]
+```
+Untuk merender tampilan form pada web, kita perlu membuat `view` yang menghubungkan mekanisme form Django dengan template untuk form kita. Saya menambahkan beberapa impor modul dan fungsi berikut pada `views.py`.
+```python
+from django.http import HttpResponseRedirect
+from main.forms import ItemForm
+from django.urls import reverse
+
+def create_item(request):
+    form = ItemForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "create_item.html", context)
+```
+fungsi di atas akan melakukan validasi (`form.is_valid()`) dan menyimpan (`form.save()`) isi input dari *form* tersebut lalu merender `create_item.html` sebagai tampilan *form* pada web. Apabila pengguna sudah menyimpan input dari *form*, halaman web akan *redirect* ke `main:show_main` (`HttpResponseRedirect`).
+
+mengedit fungsi `show_main` pada `views.py` dengan tambahan kode `items = Item.objects.all()` untuk mengambil data item yang ditambahkan dan `item_count = len(items)` untuk mengambil jumlah data item yang sudah ditambahkan.
+
+Melakukan routing di `urls.py` pada direktori `main` dengan menambahkan kode berikut
+
+```python
+urlpatterns = [
+    ...,
+     path('create-item', create_item, name='create_item'),
+]
+```
+Setelah pola URL `view` ditambahkan pada `urls.py`, saya membuat `template` dengan nama `create_item.html`. Saya menggunakan `<form method="POST">` untuk mendefinisikan tipe form `POST` dan `{% csrf_token %}` untuk mencegah serangan CSFR (Cross-site request forgery), yaitu memaksa pengguna yang sudah terautentikasi untuk mengirim permintaan ke aplikasi web tanpa sepengetahuan mereka. Untuk membuat 1 field dari form, saya menggunakan potongan kode berikut
+```html
+<div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.name.label_tag }}</label>
+            {{ form.name }}
+        </div>
+```
+`form.name.label_tag` mengembalikan nama atribut, dalam kasus ini adalah `name`. `form.name` mengembalikan input untuk atribut `name` yang dapat diisi oleh pengguna.
+
+### 2. Menambahkan 5 fungsi `views` untuk melihat pengiriman data 
+Pada Tugas 2, saya sudah membuat satu fungsi `view` untuk mleihat pengiriman data melalui format HTML, yaitu
+```python
+def show_main(request):
+    items = Item.objects.all()
+    item_count = len(items)
+    context = {
+        "name": "Ghana Ahmada Yudistira",
+        "class": "PBP B",
+        "items": items,
+        "item_count": item_count
+    }
+    return render(request, "main.html", context)
+```
+Berikut adalah 4 fungsi `views` yang ditambahkan untuk melihat pengiriman data melalui format:
+- **JSON**, Membuat fungsi `show_json` pada `views.py` berisi kode di bawah untuk melihat dan mengembalikan tampilan data dalam format JSON.
+    ```python
+    def show_json(request):
+        data = Item.objects.all()
+        return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    ```
+- **JSON berdasarkan Id**, Membuat fungsi `show_json_by_id` pada `views.py` berisi kode di bawah untuk melihat dan mengembalikan tampilan data dalam format JSON berdasarkan id yang diminta.
+    ```python
+    def show_json_by_id(request, id):
+        data = Item.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    ```
+- **XML**, Membuat fungsi `show_xml` pada `views.py` berisi kode di bawah untuk melihat dan mengembalikan tampilan data dalam format XML.
+    ```python
+    def show_xml(request):
+        data = Item.objects.all()
+        return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+    ```
+- **XML berdasarkan Id**, Membuat fungsi `show_xml_id` pada `views.py` berisi kode di bawah untuk melihat dan mengembalikan tampilan data dalam format XML berdasarkan id yang diminta.
+    ```python
+    def show_xml(request, id):
+        data = Item.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+    ```
+
+
+
+
+
+### 3. Membuat routing URL untuk masing-masing `views`
+Setelah menambahkan 5 fungsi `views`, saya menambahkan path kelima routing url tersebut pada `urls.py` dalam direktori `main`.
+
+```python
+[
+    ...
+    path('', show_main, name='show_main'), 
+    path('xml/', show_xml, name='show_xml'), 
+    path('json/', show_json, name='show_json'), 
+    path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<int:id>/', show_json_by_id, name='show_json_by_id'),
+]
+```
+fungsi `path` menerima 3 argumen, yaitu:
+- Argumen pertama adalah pernyataan path yang menentukan pola URL. Dalam kasus `<int:id>`, ini adalah bagian dari URL yang bersifat dinamis, yaitu tempat di mana nilai-nilai berbeda akan ditangkap saat URL diakses dan nilai-nilai ini akan digunakan dalam fungsi `view` terkait.
+- Argumen kedua memanggil fungsi `view` yang diinginkan.
+- Argumen ketiga adalah nama unik kepada URL ini yang digunakan untuk mengidentifikasi URL secara unik dalam aplikasi dan dapat digunakan untuk membuat tautan ke URL ini dari `template`.
+
+### 4. Screenshot Postman
+#### Hasil akses view HTML
+![Alt text](images/tugas03/postman-html.png)
+#### Hasil akses view JSON
+![Alt text](images/tugas03/postman-json.png)
+#### Hasil akses view JSON berdasarkan id
+![Alt text](images/tugas03/postman-json-id.png)
+#### Hasil akses view XML
+![Alt text](images/tugas03/postman-xml.png)
+#### Hasil akses view XML berdasarkan id
+![Alt text](images/tugas03/postman-xml-id.png)
+
+### Bonus Tugas 3
+Saya menambahkan potongan kode berikut untuk menampilkan jumlah data item yang sudah tersimpan pada *database*.
+```html
+<p class="mb-2"><strong>Total Items Saved:</strong> {{ item_count }}</p>
+```
+variabel `item_count` didapat dari fungsi view `show_main` berikut.
+```python
+def show_main(request):
+    items = Item.objects.all()
+    item_count = len(items)
+    context = {
+        "name": "Ghana Ahmada Yudistira",
+        "class": "PBP B",
+        "items": items,
+        "item_count": item_count
+    }
+    return render(request, "main.html", context)
+```
+
+## Tugas 2 
+### Pengerjaan Aplikasi  
 ### 1. Membuat sebuah proyek Django baru
 
 Sebelum membuat proyek Django, saya membuat direktori lokal dan mempersiapkan *virtual environemnt* pada direktori tersebut dengan menjalankan perintah di bawah ini pada *command prompt* 
@@ -154,7 +366,7 @@ Cek hasil program pada `http://localhost:8000/main`. Apabila program berhasil me
 
 Aplikasi berhasil di-*deploy* dan dapat diakses pada [link ini](https://car-mart.adaptable.app/main/).
 
-## Bagan Aplikasi Django
+### Bagan Aplikasi Django
 ![Alt text](images/bagan-django.png)
 - Client mengirimkan permintaan (HTTP Request) kepada server untuk mengambil halaman web melalui browser.
 - Permintaan ini diteruskan ke sistem routing yang dikelola oleh Django dan mencari pola URL yang sesuai dengan permintaan klien.
@@ -163,10 +375,10 @@ Aplikasi berhasil di-*deploy* dan dapat diakses pada [link ini](https://car-mart
 - Setelah semua operasi selesai, fungsi yang terpilih pada berkas `views.py` akan menghasilkan halaman web yang diminta oleh klien dalam berkas HTML atau disebut dengan `template`.
 - Berkas HTML ini disimpan pada direktori `templates` untuk penggunaan berikutnya.
 - Akhirnya, browser client akan merender berkas HTML ini sebagai tanggapan (HTTP Response) dari server Django sehingga menghasilkan tampilan yang terlihat oleh pengguna.
-## Tujuan Penggunaan Virtual Environment
+### Tujuan Penggunaan Virtual Environment
 Kita tetap dapat membuat proyek Django tanpa menggunakan *environment variable* tetapi tidak cocok digunakan untuk pengembangan proyek yang besar karena satu tim belum tentu menggunakan versi modul yang sama. Dengan menggunakan *virtual environment*, kita dapat memisahkan versi modul yang digunakan pada setiap proyek yang berbeda, misalnya melalui berkas `requirements.txt` berisi modul yang digunakan pada proyek tersebut. Hal ini membantu mencegah konflik dan masalah keamanan yang mungkin muncul jika kita menggunakan versi yang tidak kompatibel atau berbeda. Alhasil, penggunaan *virtual environment* memungkinkan pengembangan proyek secara paralel dengan *developer* lain lebih efisien dibandingkan membuat proyek Django tanpa menggunakan *virtual environment* (*global environment*).
 
-## Penjelasan MVC, MVT, dan MVVM
+### Penjelasan MVC, MVT, dan MVVM
 Model-View-Controller (MVC), Model-View-Template (MVT), dan Model-View-ViewModel (MVVM) adalah *design pattern* yang sering digunakan dalam arsitektur perangkat lunak. *Design pattern* merupakan panduan dan *template reusable* yang membantu pengembang perangkat lunak mengorganisir dan merancang kode mereka agar lebih efisien dan mudah dikembangkan.
 
 ### 1. Mode-View-Controller (MVC)
@@ -181,5 +393,5 @@ Komponen MVT hampir mirip dengan MVC, yaitu menggunakan Model yang berkaitan den
 **Perbedaan**: MVC, MVT, dan MVVM menggunakan komponen yang berbeda. MVC menggunakan Controller untuk mengatur alur Model dan View. MVT menggunakan Template untuk mengatur tampilan HTML dan tidak perlu mengelola Controller karena sudah dilakukan oleh *Framework*. Sementara MVVM menggunakan ViewModel sebagai perantara untuk menghubungkan tampilan dengan data melalui pembaruan Model. 
 
 
-## Bonus
+### Bonus Tugas 2
 Membuat testing untuk memeriksa panjang karakter dan tipe data pada Model.

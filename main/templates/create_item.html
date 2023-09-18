@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-2xl">
+        {{ form.non_field_errors }}
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.name.label_tag }}</label>
+            {{ form.name }}
+        </div>
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.amount.label_tag }}</label>
+            {{ form.amount }}
+        </div>
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.price.label_tag }}</label>
+            {{ form.price }}
+        </div>
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.category.label_tag }}</label>
+            {{ form.category }}
+        </div>
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.description.label_tag }}</label>
+            {{ form.description }}
+        </div>
+        
+        <button type="submit" class="bg-custom-navy hover:bg-blue-800 shadow-md text-white px-4 py-2 mt-4 rounded-lg cursor-pointer">Add Item</button>
+    </div>
+</form>
+{% endblock %}

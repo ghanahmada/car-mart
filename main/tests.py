@@ -1,10 +1,10 @@
 from django.test import TestCase, Client
-from main.models import Product
+from main.models import Item
 
-class ProductModelTest(TestCase):
+class ItemModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        Product.objects.create(
+        Item.objects.create(
             name='Porsche 918 Spyder',
             amount=7,
             price=1144000,
@@ -13,26 +13,26 @@ class ProductModelTest(TestCase):
         )
 
     def test_name_max_length(self):
-        product = Product.objects.get(id=1)
-        max_length = product._meta.get_field('name').max_length
-        self.assertLessEqual(len(product.name), max_length)
+        item = Item.objects.get(id=1)
+        max_length = item._meta.get_field('name').max_length
+        self.assertLessEqual(len(item.name), max_length)
 
     def test_amount_data_type(self):
-        product = Product.objects.get(id=1)
-        self.assertIsInstance(product.amount, int)
+        item = Item.objects.get(id=1)
+        self.assertIsInstance(item.amount, int)
 
     def test_price_data_type(self):
-        product = Product.objects.get(id=1)
-        self.assertIsInstance(product.price, int)
+        item = Item.objects.get(id=1)
+        self.assertIsInstance(item.price, int)
 
     def test_category_max_length(self):
-        product = Product.objects.get(id=1)
-        max_length = product._meta.get_field('category').max_length
-        self.assertLessEqual(len(product.category), max_length)
+        item = Item.objects.get(id=1)
+        max_length = item._meta.get_field('category').max_length
+        self.assertLessEqual(len(item.category), max_length)
 
     def test_description_max_length(self):
-        product = Product.objects.get(id=1)
-        self.assertIsInstance(product.description, str)
+        item = Item.objects.get(id=1)
+        self.assertIsInstance(item.description, str)
 
 
 #
@@ -43,4 +43,4 @@ class mainTest(TestCase):
 
     def test_main_using_main_template(self):
         response = Client().get('/main/')
-        self.assertTemplateUsed(response, 'author.html')
+        self.assertTemplateUsed(response, 'main.html')

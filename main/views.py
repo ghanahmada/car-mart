@@ -1,25 +1,52 @@
 from django.shortcuts import render
 
+from django.http import HttpResponseRedirect
+from main.forms import ItemForm
+from django.urls import reverse
+from main.models import Item
+
+from django.http import HttpResponse
+from django.core import serializers
+
 # Create your views here.
-def show_author(request):
+def show_main(request):
+    items = Item.objects.all()
+    item_count = len(items)
     context = {
         "name": "Ghana Ahmada Yudistira",
-        "class": "PBP B"
+        "class": "PBP B",
+        "items": items,
+        "item_count": item_count
     }
-    return render(request, "author.html", context)
+    return render(request, "main.html", context)
 
-def show_content(request):
-    context = {
-        'name': 'Porsche 918 Spyder',
-        'amount': 918,
-        'price': 1144000,
-        'category': 'Sports Car',
-        'description':"""The Porsche 918 Spyder stands out as a car with dual personalities. 
-        It's a speed demon with a V8 engine and electric motors working together, dishing out 
-        over 880 horsepower for an exhilarating ride. When you want to be eco-conscious, it's 
-        got an electric mode for silent, emissions-free cruising. This car seamlessly combines 
-        high-performance thrills and environmental responsibility, reflecting Porsche's dedication 
-        to both power and the planet. """
-    }
 
-    return render(request, "content.html", context)
+def create_item(request):
+    form = ItemForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "create_item.html", context)
+
+
+def show_xml(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+
+def show_json(request):
+    data = Item.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+
+def show_xml_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+
+def show_json_by_id(request, id):
+    data = Item.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+    <div class="m-4">
+        <div class="text-lg">
+            <p><strong>Nama:</strong> {{ name }}</p>
+            <p><strong>Kelas:</strong> {{ class }}</p>
+        </div>
+    </div>
+
+    <div class="m-4">
+        <p class="mb-2"><strong>Total Items Saved:</strong> {{ item_count }}</p>
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto border border-gray-400 shadow-md">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="border border-gray-300 p-2 text-center">No</th>
+                        <th class="border border-gray-300 p-2 text-center">Name</th>
+                        <th class="border border-gray-300 p-2 text-center">Amount</th>
+                        <th class="border border-gray-300 p-2 text-center">Price</th>
+                        <th class="border border-gray-300 p-2 text-center">Category</th>
+                        <th class="border border-gray-300 p-2 text-center">Description</th>
+                        <th class="border border-gray-300 p-2 text-center">Date Added</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
+                    {% for item in items %}
+                        <tr>
+                            <td class="border border-gray-300 p-2 text-center">{{ item.id }}</td>
+                            <td class="border border-gray-300 p-2 text-center">{{ item.name }}</td>
+                            <td class="border border-gray-300 p-2 text-center">{{ item.amount }}</td>
+                            <td class="border border-gray-300 p-2 text-center">{{ item.price }}</td>
+                            <td class="border border-gray-300 p-2 text-center">{{ item.category }}</td>
+                            <td class="border border-gray-300 p-2 text-center">{{ item.description }}</td>
+                            <td class="border border-gray-300 p-2 text-center">{{ item.date_added }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="m-4">
+        <a href="{% url 'main:create_item' %}">
+            <button class="bg-custom-navy text-white py-2 px-4 rounded-lg hover:bg-blue-900 shadow-md hover:shadow-lg transform hover:translate-y-0.5">
+                Add New Item
+            </button>
+        </a>
+    </div>
+{% endblock content %}
