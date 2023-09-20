@@ -74,7 +74,7 @@ HTML atau Hypertext Markup Language adalah bahasa markup yang digunakan untuk me
 ```
 
 ### Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
-JSON sering digunakan dalam pertukaran data antara aplikasi web modern karena memiliki format yang ringkas dan mudah dibaca sehingga *developer* tidak kesulitan memahami struktur data JSON ketimbang strukur data lainnya serta lebih efisien dalam hal ukuran penyimpanan data.
+JSON sering digunakan dalam pertukaran data antara aplikasi web modern karena memiliki format yang ringkas dan mudah dibaca sehingga *developer* tidak kesulitan memahami struktur data JSON ketimbang strukur data lainnya serta lebih efisien dalam hal ukuran penyimpanan data. Selain keuntungan tersebut, JSON juga sering digunakan karena kompatibilitasnya yang luas dengan berbagai bahasa pemrograman. Banyak bahasa pemrograman, seperti JavaScript, Python, Java, C#, dan lainnya, memiliki *library* khusus yang memudahkan pengolahan data dalam format JSON. Hal ini menjadikan JSON sebagai pilihan yang sangat fleksibel untuk pertukaran data antara aplikasi yang ditulis dalam berbagai bahasa pemrograman sehingga mempermudah integrasi antara sistem-sistem yang berbeda.
 
 ### Implementasi Form dan Data Delivery pada Django
 ### 1. Membuat input `form` untuk menambahkan objek model pada app sebelumnya
@@ -120,9 +120,9 @@ urlpatterns = [
 Setelah pola URL `view` ditambahkan pada `urls.py`, saya membuat `template` dengan nama `create_item.html`. Saya menggunakan `<form method="POST">` untuk mendefinisikan tipe form `POST` dan `{% csrf_token %}` untuk mencegah serangan CSFR (Cross-site request forgery), yaitu memaksa pengguna yang sudah terautentikasi untuk mengirim permintaan ke aplikasi web tanpa sepengetahuan mereka. Untuk membuat 1 field dari form, saya menggunakan potongan kode berikut
 ```html
 <div class="mb-4 border rounded-lg p-2">
-            <label class="font-semibold">{{ form.name.label_tag }}</label>
-            {{ form.name }}
-        </div>
+    <label class="font-semibold">{{ form.name.label_tag }}</label>
+    {{ form.name }}
+</div>
 ```
 `form.name.label_tag` mengembalikan nama atribut, dalam kasus ini adalah `name`. `form.name` mengembalikan input untuk atribut `name` yang dapat diisi oleh pengguna.
 
