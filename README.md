@@ -8,6 +8,180 @@
 
 **Link aplikasi**: *https://car-mart.adaptable.app/main/* 
 
+## Tugas 4
+### Apa itu Django `UserCreationForm`, dan jelaskan apa kelebihan dan kekurangannya?
+`UserCreationForm` merupakan komponen dalam framework Django yang memiliki peran penting dalam pembuatan formulir pendaftaran pengguna (user registration form). Dalam konteks pengembangan aplikasi web Django, formulir ini memberikan kemudahan bagi pengguna untuk melakukan pendaftaran akun baru di situs web yang dikelola. Formulir ini secara efektif mengurangi kerumitan dalam proses penciptaan akun pengguna, serta mengelola validasi data yang diinputkan oleh pengguna.
+
+**Kelebihan:**
+
+- Mudah digunakan karena sudah menjadi bagian dari Django sehingga tinggal diimpor dan ditambahkan sedikit konfigurasi.
+
+- Adanya validasi, seperti pengecekan *input* password sudah sesuai dengan ketentuan atau belum.
+
+- Kompatibilitas dengan Model User Django sehingga memudahkan integrasinya dengan sistem otentikasi Django bawaan dan menyederhanakan manajemen pengguna di aplikasi.
+
+**Kekurangan:**
+
+- tidak cocok untuk formulir yang kompleks. Dalam beberapa kasus, kita mungkin memiliki kebutuhan yang sangat spesifik untuk formulir pendaftaran pengguna sehingga perlu membuat formulir kustom dari awal.
+
+- memiliki keterbatasan dalam penampilan dengan desain yang cenderung sederhana sehingga memerlukan tampilan kustom yang dibangun dengan HTML, CSS, dan mungkin JavaScript untuk menciptakan formulir pendaftaran yang lebih kompleks dan estetik.
+
+- adanya batasan pada validasi formulir sehingga perlu menambah atau membuat validasi baru jika belum tersedia.
+
+### Apa perbedaan antara autentikasi dan otorisasi dalam konteks Django, dan mengapa keduanya penting?
+Autentikasi adalah proses identifikasi pengguna dalam suatu aplikasi untuk memastikan bahwa pengguna yang mencoba mengakses sistem atau layanan adalah mereka yang seharusnya dan memiliki hak akses yang sesuai. Otorisasi adalah pemberian akses pada pengguna sesuai tipe pengguna yang sudah ditentukan pada Django sehingga memungkinkan pengendalian yang lebih terperinci terhadap fungsi dan data. Jadi perbedaan antara keduanya autentikasi adalah proses identifikasi pengguna, sedangkan otorisasi adalah pemberian hak akses pada pengguna setelah mereka diidentifikasi.
+
+Keduanya penting karena autentikasi memastikan identitas pengguna yang sah, sementara otorisasi mengontrol hak akses pengguna terhadap data dan fungsi tertentu sehingga menjaga keamanan dan privasi serta memastikan pengguna hanya dapat melakukan tindakan yang sesuai dengan perannya dalam aplikasi.
+
+### Apa itu `cookies` dalam konteks aplikasi web, dan bagaimana Django menggunakan `cookies` untuk mengelola data sesi pengguna?
+`Cookies` adalah file kecil yang digunakan oleh situs web untuk menyimpan informasi tentang pengguna, seperti login, preferensi bahasa, dan riwayat pencarian. `Cookies` berperan dalam mengelola data sesi pengguna, yang merupakan informasi yang disimpan oleh server selama pengguna menjalankan aplikasi web.
+
+Django menggunakan `cookies` untuk mengelola data sesi pengguna dengan cara yang sistematis. Ketika pengguna mengakses situs, Django memberikan ID sesi unik yang disimpan dalam `cookie` di peramban mereka. Data sesi, seperti informasi login atau preferensi, dapat disimpan dalam server dan diakses melalui ID sesi ini. Saat pengguna melakukan permintaan ke server, Django membaca ID sesi dari `cookie`, memungkinkan pengidentifikasian pengguna dan penggunaan data sesi untuk memberikan pengalaman yang sesuai. Django juga mengamankan data sesi dengan mengenkripsi ID sesi dan menambahkan tanda tangan untuk menjaga keamanan dan integritas data sesi. Dengan cara ini, Django memungkinkan pengembang untuk menyediakan pengalaman yang lebih personal dalam aplikasi web mereka.
+
+
+### Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai?
+Penggunaan `cookies` dalam pengembangan web dapat membawa risiko keamanan yang signifikan jika tidak dikelola dengan hati-hati. `Cookies` dapat mengandung informasi sensitif dan jika tidak diimplementasikan dengan benar dapat dieksploitasi oleh penyerang untuk mencuri data pengguna atau melakukan serangan terhadap situs web. Dengan demikian, pengembang web perlu mengambil langkah-langkah keamanan yang tepat, seperti mengenkripsi data dalam `cookies` untuk melindungi informasi tersebut, menetapkan waktu kadaluwarsa `cookies` sesuai dengan kebutuhan, dan memastikan bahwa `cookies` hanya digunakan melalui koneksi yang aman (HTTPS) untuk mengurangi risiko eksploitasi. Dengan cara ini, penggunaan `cookies` dalam pengembangan web dapat tetap berguna dan efisien sambil menjaga keamanan data pengguna yang krusial.
+
+### Implementasi Autentikasi, Session, dan Cookies pada Django
+
+### 1. Mengimplementasikan fungsi registrasi, login, dan logout untuk memungkinkan pengguna untuk mengakses aplikasi sebelumnya dengan lancar.
+- Untuk membuat fungsi registrasi, saya menggunakan `UserCreationForm` yang sudah disediakan oleh Django supaya tidak perlu menulis kode dari awal.
+
+    ```python
+    from django.shortcuts import redirect
+    from django.contrib.auth.forms import UserCreationForm
+    from django.contrib import messages  
+
+    def register(request):
+        form = UserCreationForm()
+
+        if request.method == "POST":
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your account has been successfully created!')
+                return redirect('main:login')
+        context = {'form':form}
+        return render(request, 'register.html', context)
+    ```
+
+    Setelah itu, saya membuat template `register.html` untuk menampilkan halaman *register* dan melakukan *routing* ke template tersebut pada `urls.py` dengan fungsi `register` yang baru dibuat pada `view`
+    ```python
+    ...
+    path('register/', register, name='register'),
+    ...
+    ```
+
+- Untuk mmebuat fungsi login, saya menggunakan fungsi `authenticate` dan `login` dari Django untuk mempermudah proses login.
+
+    ```python
+    from django.contrib.auth import authenticate, login
+
+    def login_user(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('main:show_main')
+        else:
+            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+    ```
+
+    Setelah itu, saya membuat template `login.html` untuk menampilkan halaman *login* dan melakukan *routing* ke template tersebut pada `urls.py` dengan fungsi `login` yang baru dibuat pada `view`
+    ```python
+    ...
+    path('login/', login, name='login'),
+    ...
+    ```
+
+- Untuk membuat fungsi logout, saya menggunakan fungsi `logout` dari Django.
+
+    ```python
+    from django.contrib.auth import logout
+
+    def logout_user(request):
+        logout(request)
+        return redirect('main:login')
+    ```
+
+    Setelah itu, saya memodifikasi template `main.html` dengan menambahkan *button* `logout` dan melakukan *routing* pada `urls.py` dengan fungsi `logout_user` yang baru dibuat pada `view`
+
+    ```python
+    path('logout/', logout_user, name='logout'),
+    ```
+
+### 2. Membuat **dua** akun pengguna dengan masing-masing **tiga** dummy data menggunakan model yang telah dibuat pada aplikasi sebelumnya untuk setiap akun **di lokal**.
+Akun pertama:
+![Alt text](images/tugas04/homepage-akun1.png)
+
+Akun kedua:
+![Alt text](images/tugas04/homepage-akun2.png)
+
+### 3. Menghubungkan model `Item` dengan `User`.
+Sebelum menghubungkan model `Item` dengan `User`, saya melakukan register akun terlebih dahulu. Lalu, memodifikasi Model dengan mengganti
+
+```python
+...
+from django.contrib.auth.models import User
+
+class Item(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+...
+```
+Saya juga memodifikasi fungsi `create_item` pada `view` supaya tambahan item baru terasosiasi dengan user yang sedang login.
+
+```python
+def create_item(request):
+    form = ItemForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        product = form.save(commit=False)
+        product.user = request.user
+        product.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "create_item.html", context)
+```
+
+Terakhir, simpan semua perubahan dengan melakukan migrasi model.
+
+### 4. Menampilkan detail informasi pengguna yang sedang logged in seperti username dan menerapkan `cookies` seperti `last login` pada halaman utama aplikasi.
+
+Saya mengganti `name` pada halaman main sesuai dengan username user yang login
+
+```python
+def show_main(request):
+    products = Product.objects.filter(user=request.user)
+
+    context = {
+        'name': request.user.username,
+        ...
+```
+Untuk menerapkan `cookies` last login, saya menambahkan `key` pada `context` di fungsi `show_main` yaitu
+```python
+context = {
+        ...
+        'last_login': request.COOKIES['last_login'],
+            }
+```
+Lalu, ditambahkan juga status kapan user login terakhir kali pada `main.html`
+
+```html
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+```
+
+#### Tampilan last login session
+![Alt text](images/tugas04/last-login-session.png)
+
+### Bonus
+Membuat `button` untuk menambah dan mengurangi 1 amount pada tiap `item` serta `button` untuk menghapus `item` dari kepemilikan `user` yang terasosiasi.
+![Alt text](images/tugas04/homepage-akun1.png)
+
 ## Tugas 3
 ### Perbedaan antara form `POST` dan `GET` dalam Django
 `POST` digunakan untuk mengirim data ke server untuk diproses. Ini tidak idempoten, yang berarti setiap kali dipanggil, dapat membuat sumber daya baru atau mengubah yang sudah ada. Permintaan `POST` biasanya digunakan untuk membuat atau memperbarui data, seperti mengirimkan formulir atau mengunggah file. 
@@ -282,7 +456,7 @@ Model pada Django dapat diibaratkan sebagai Table dalam suatu basis data. Membua
 ```python
 from django.db import models
 
-class Product(models.Model):
+class Item(models.Model):
     name = models.CharField(max_length=255)
     amount = models.IntegerField()
     price = models.IntegerField()
@@ -290,7 +464,7 @@ class Product(models.Model):
     description = models.TextField()
 ```
 
-Terbuat model bernama `Product` berisi lima atribut, yaitu:
+Terbuat model bernama `Item` berisi lima atribut, yaitu:
 - `name` menggunakan tipe data `CharField` dengan batasan 255 karakter.
 - `amount` menggunakan tipe data `IntegerField`.
 - `price` menggunakan tipe data `IntegerField`.
@@ -367,7 +541,7 @@ Cek hasil program pada `http://localhost:8000/main`. Apabila program berhasil me
 Aplikasi berhasil di-*deploy* dan dapat diakses pada [link ini](https://car-mart.adaptable.app/main/).
 
 ### Bagan Aplikasi Django
-![Alt text](images/bagan-django.png)
+![Alt text](images/tugas02/bagan-django.png)
 - Client mengirimkan permintaan (HTTP Request) kepada server untuk mengambil halaman web melalui browser.
 - Permintaan ini diteruskan ke sistem routing yang dikelola oleh Django dan mencari pola URL yang sesuai dengan permintaan klien.
 - Setelah pola URL yang sesuai ditemukan, Django akan memanggil fungsi dalam berkas `views.py` yang telah terhubung dengan URL tersebut.

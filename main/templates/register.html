@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Register</title>
+{% endblock meta %}
+
+{% block content %}
+
+<div class="min-h-screen flex flex-col items-center justify-start mt-32">
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-xl w-full"> <!-- Increase max-w-xl to make the div wider -->
+        <h1 class="text-2xl mb-4">Register</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="flex items-center justify-between mt-4">
+                <input type="submit" name="submit" value="Daftar" class="px-4 py-2 bg-blue-800 hover:bg-blue-900 text-white rounded-md font-semibold transition duration-300 ease-in-out">
+            </div>
+        </form>
+
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock content %}
+    
