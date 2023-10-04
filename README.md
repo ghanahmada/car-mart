@@ -8,6 +8,289 @@
 
 **Link aplikasi**: *https://car-mart.adaptable.app/main/* 
 
+## Tugas 5
+### Jelaskan manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya.
+
+#### 1. Class Selector (`'.classname'`)
+Class Selector digunakan untuk memilih elemen-elemen yang memiliki kelas CSS tertentu. Dapat digunakan pada beberapa elemen sehingga berguna ketika kita ingin menerapkan gaya yang sama pada beberapa elemen tanpa harus mempengaruhi semua elemen dengan tipe yang sama.
+
+#### 2. Element Selector (`elementname`)
+Element Selector digunakan untuk memilih semua elemen dengan tipe yang ditentukan (misalnya: `div`, `p`, `a`) di dalam halaman web. Element Selector berguna ketika ingin mengganti *style* untuk semua elemen dengan tipe yang sama, misalnya, mengatur margin atau padding untuk semua paragraf (`<p>`) atau mengubah warna latar belakang untuk semua div (`<div>`).
+
+#### 3. ID Selector (`#idname`)
+Pada halaman web, satu elemen hanya bisa memiliki satu ID. Apabila ingin mengganti desain atau style, kita dapat menggunakan ID Selector. ID Selector digunakan untuk memilih elemen dengan ID yang spesifik. Contoh elemen yang biasa dipilih oleh ID Selector adalah `<header>` dan `<main>`.
+
+### Jelaskan HTML5 Tag yang kamu ketahui.
+
+`<!DOCTYPE html>`: Menandakan bahwa halaman web menggunakan versi HTML5.
+
+`<html>`: Menandakan awal dan akhir dari dokumen HTML.
+
+`<head>`: Berisi informasi-informasi terkait halaman web, seperti judul, tautan ke file CSS, atau skrip JavaScript.
+
+`<title>`: Menentukan judul dari halaman web yang akan ditampilkan di bilah judul browser.
+
+`<link>`: Menghubungkan halaman web dengan file eksternal, seperti file CSS atau ikon situs.
+
+`<style>`: Menyisipkan CSS langsung di dalam dokumen HTML.
+
+`<script>`: Digunakan untuk menyisipkan skrip JavaScript di dalam halaman web.
+
+`<body>`: Berisi konten aktual dari halaman web, seperti teks, gambar, video, dan elemen-elemen lainnya.
+
+`<h1>`, `<h2>`, `<h3>`, `<h4>`, `<h5>`, `<h6>`: Menandai judul dan subjudul dari bagian-bagian halaman web dengan tingkat kepentingan yang berbeda. `<h1>` menandakan judul terluar sedangkan `<h6>` adalah judul terdalam.
+
+`<p>`: Menandai sebuah paragraf teks.
+
+`<a>`: Membuat tautan ke halaman web lain atau berkas-berkas di dalam halaman tersebut.
+
+`<img>`: Menyisipkan gambar ke dalam halaman web.
+
+`<ul>`, `<ol>`, `<li>`: Mengatur daftar tidak terurut (unordered list) dan daftar terurut (ordered list) dengan elemen-elemen list.
+
+`<div>`: Menandai sebuah divisi atau sekelompok elemen yang dapat diatur dan dimodifikasi dengan CSS atau JavaScript.
+
+`<span>`: Menandai sebagian teks yang dapat diatur dengan CSS atau JavaScript.
+
+`<input>`: Elemen untuk pembuatan bentuk input, seperti teks, sandi, atau tombol.
+
+`<form>`: Menandakan awal dan akhir dari formulir, yang digunakan untuk mengumpulkan data dari pengguna.
+
+### Jelaskan perbedaan antara margin dan padding.
+
+Margin adalah ruang di luar batas elemen. Itu berarti, margin mengontrol seberapa jauh elemen dari elemen lain di sekitarnya. Margin tidak memiliki warna atau latar belakang dan hanya mengatur jarak antara elemen dengan elemen lain di sekitarnya. Dalam contoh di bawah, elemen dengan kelas ``.card` akan memiliki margin 10 piksel di sekitar semua sisi (atas, kanan, bawah, dan kiri).
+```css
+.card {
+    margin: 10px;
+}
+```
+
+ Padding adalah ruang di dalam batas elemen. Padding mengontrol seberapa jauh konten elemen dari batasnya sendiri. Padding berada di antara batas elemen dan konten di dalamnya. Dalam contoh di bawah, elemen dengan kelas `.card` akan memiliki padding 10 piksel di sekitar kontennya.
+ ```css
+.card {
+    padding: 10px;
+}
+```
+
+Analogi lain untuk memahami perbedaan padding dan margin adalah bayangkan sebuah kotak (elemen). Margin adalah ruang di luar kotak tersebut (antara kotak dengan elemen lain di sekitarnya), sedangkan padding adalah ruang di dalam kotak tersebut (antara batas kotak dengan konten di dalamnya).
+
+### Jelaskan perbedaan antara framework CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya?
+
+**Bootstrap** adalah sebuah framework CSS yang umumnya digunakan dalam pengembangan situs web. Framework ini mengikuti pendekatan konvensional dengan menyediakan berbagai komponen pra-desain dan kelas CSS yang telah ditentukan sebelumnya. Dengan Bootstrap, pengembang dapat membangun antarmuka pengguna dengan cepat menggunakan komponen-komponen yang sudah ada, membuatnya menjadi pilihan populer untuk proyek-proyek dengan jadwal pengembangan yang ketat.
+
+Di sisi lain, **Tailwind** CSS adalah kerangka kerja CSS yang mengadopsi pendekatan "utility-first". Berbeda dengan Bootstrap, Tailwind tidak menyediakan komponen pra-didesain, melainkan memberikan sejumlah besar kelas utilitas yang memungkinkan pengembang untuk merancang tata letak dan desain yang unik secara lebih bebas. Dengan Tailwind, pengembang memiliki kendali penuh atas desainnya, memungkinkan kreativitas tanpa batas dan adaptabilitas yang tinggi terhadap kebutuhan proyek.
+
+Ketika memilih antara Bootstrap dan Tailwind, faktor penentu seringkali terletak pada kebutuhan proyek dan preferensi pengembang. Bootstrap ideal untuk proyek-proyek yang membutuhkan pengembangan cepat dengan menggunakan komponen-komponen yang telah ada. Sementara itu, Tailwind cocok untuk mereka yang mengutamakan kustomisasi tingkat tinggi dan ingin memiliki kendali penuh atas desain, memungkinkan mereka membangun antarmuka pengguna yang sangat unik dan mendalam. Dengan demikian, pilihan antara keduanya bergantung pada kompleksitas proyek, tingkat kreativitas yang diinginkan, dan fleksibilitas dalam pengembangan tata letak dan desain.
+
+### Proses Pengerjaan Tugas
+#### 1. Kustomisasi tampilan `register`
+Supaya dapat memodifikasi tampilan `form` bawaan Django, yaitu `UserCreationForm`, saya mendownload *package* tambahan bernama `widget-tweaks`. Saya melakukan instalasi pada environment variables dan menambahkannya di `settings.py`.
+```bash
+pip install django-widget-tweaks
+```
+```python
+INSTALLED_APPS = [
+    ...
+    "main",
+    "widget_tweaks"
+]
+```
+Lalu saya memodifikasi template `register.html` menjadi berikut.
+
+```html
+...
+<div class="min-h-screen flex flex-col items-center justify-start mt-32">
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md w-full"> 
+        <h1 class="text-2xl mb-4">Register</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+                <div class="form-group px-3">
+                    {{ field.errors }}
+                    <label for="{{ field.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                        {{ field.label }}
+                    </label>
+                    <div class="py-1"></div>
+                    {% render_field field class="form-control form-input border border-gray-300 rounded-md py-2 px-3" placeholder=field.label %}
+                    <div class="py-2"></div>
+                </div>
+            {% endfor %}
+            <div class="flex items-center justify-between mt-4">
+                <input type="submit" name="submit" value="Register" class="px-4 py-2 bg-custom-navy hover:bg-blue-800 text-white rounded-md font-semibold transition duration-300 ease-in-out">
+            </div>
+        </form>
+
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <p class="text-gray-600 text-sm mt-4">Already have an account? <a href="{% url 'main:login' %}" class="text-blue-500">Login now</a></p>
+    </div>
+</div>
+...
+```
+
+#### 2. Kustomisasi tampilan `login`
+Saya memodifikasi tampilan `login.html` dengan menambahkan placeholder pada tiap input dan menambah box supaya form input lebih mudah dilihat oleh user.
+```html
+...
+<div class="min-h-screen flex flex-col items-center justify-start mt-32"> 
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md w-full">
+        <h1 class="text-2xl mb-4">Login</h1>
+
+        <form method="POST" action="" class="mb-4">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700 text-sm font-bold mb-2">Username:</label>
+                <input type="text" name="username" id="username" placeholder="Username" class="form-input border border-gray-300 rounded-md py-2 px-3">
+            </div>
+                    
+            <div class="mb-6">
+                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password:</label>
+                <input type="password" name="password" id="password" placeholder="Password" class="form-input border border-gray-300 rounded-md py-2 px-3">
+            </div>
+
+            <div class="flex items-center justify-between">
+                <button class="bg-custom-navy hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Login
+                </button>
+            </div>
+        </form>
+
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <p class="text-gray-600 text-sm mt-4">Don't have an account yet? <a href="{% url 'main:register' %}" class="text-blue-500">Register now</a></p>
+    </div>
+</div>
+...
+```
+
+#### 3. Kustomisasi tampilan `create item`
+Pada halaman `create item`, saya memodifikasi tiap elemen dari form Django dengan styling tailwind yang simple. Berikut adalah tampilan `create_item.html`
+```html
+...
+<form method="POST">
+    {% csrf_token %}
+    <div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-2xl">
+        {{ form.non_field_errors }}
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.name.label_tag }}</label>
+            {{ form.name }}
+        </div>
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.amount.label_tag }}</label>
+            {{ form.amount }}
+        </div>
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.price.label_tag }}</label>
+            {{ form.price }}
+        </div>
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.category.label_tag }}</label>
+            {{ form.category }}
+        </div>
+        
+        <div class="mb-4 border rounded-lg p-2">
+            <label class="font-semibold">{{ form.description.label_tag }}</label>
+            {{ form.description }}
+        </div>
+        
+        <button type="submit" class="bg-custom-navy hover:bg-blue-800 shadow-md text-white px-4 py-2 mt-4 rounded-lg cursor-pointer">Add Item</button>
+        <p class="text-gray-600 text-sm mt-4">No need to add another item? <a href="{% url 'main:show_main' %}" class="text-blue-500">Back</a></p>
+    </div>
+</form>
+...
+```
+
+#### 4. Kustomisasi tampilan `main`
+Pada daftar inventori, saya menggunakan elemen `card` untuk meletakkan setiap item dari inventori user. Button `increment`, `decrement`, dan `delete_item`  juga saya letakkan di dalam card item tersebut supaya lebih mudah digunakan
+Saya memodifikasi tampilan daftar inventori pada `main.html` menjadi seperti berikut
+```html
+...
+    <div class="m-4">
+        <p class="mb-2"><strong>Total Items Saved:</strong> {{ item_count }}</p>
+            <div class="row">
+            {% for item in items %}
+                <div class="col">
+                    <div class="card m-3" style="width: 24rem;">
+                    <div class="card text-left shadow p-3 rounded {% if forloop.last %}bg-custom-navy text-white{% else %}bg-blue-200{% endif %}">
+                        <div class="card-body">
+                            <div class="flex justify-between items-center gap-4">
+                                <div class="flex-none"><h3 class="card-title"><b>{{ item.name }}</b></h3></div>
+                                <div class="flex-none text-right"><h3 class="card-title"><b>{{ item.category }}</b></h3></div>
+                            </div>
+                            <p class="card-text mb-2">Price: {{ item.price }}</p>
+                            <p class="card-text mb-2">Amount: {{ item.amount }}</p>
+                            <p class="card-text mb-2">{{ item.description }}</p>
+                            <div class="flex justify-between items-center gap-4">
+
+                                <div class="flex-none">
+                                    <form action="/decrement/{{item.pk}}/" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded">
+                                            -
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="flex-grow text-center"> 
+                                    <form action="/increment/{{item.pk}}/" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-4 rounded">
+                                            +
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <div class="flex-none text-right">
+                                    <form action="/delete/{{item.pk}}/" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded">
+                                            x
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-body-secondary">
+                            {{ item.date_added }}
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    ...
+```
+
+### Bonus
+Saya memberikan perbedaan warna pada card untuk item terakhir dari inventori user melalui syntax berikut yang diletakkan pada tag `<div>`
+```html
+<div class="card text-left shadow p-3 rounded {% if forloop.last %}bg-custom-navy text-white{% else %}bg-blue-200{% endif %}">
+```
+`if forloop.last` akan memodifikasi last item dengan warna `custom-navy` yang telah ditentukan. Sementara item-item lainnya akan menggunakan warna `blue-200`.
+
 ## Tugas 4
 ### Apa itu Django `UserCreationForm`, dan jelaskan apa kelebihan dan kekurangannya?
 `UserCreationForm` merupakan komponen dalam framework Django yang memiliki peran penting dalam pembuatan formulir pendaftaran pengguna (user registration form). Dalam konteks pengembangan aplikasi web Django, formulir ini memberikan kemudahan bagi pengguna untuk melakukan pendaftaran akun baru di situs web yang dikelola. Formulir ini secara efektif mengurangi kerumitan dalam proses penciptaan akun pengguna, serta mengelola validasi data yang diinputkan oleh pengguna.

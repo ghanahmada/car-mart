@@ -29,7 +29,7 @@ def show_main(request):
     return render(request, "main.html", context)
 
 
-def create_item(request):
+def create_item(request):       
     form = ItemForm(request.POST or None)
 
     if form.is_valid() and request.method == "POST":

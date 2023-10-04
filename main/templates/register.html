@@ -1,20 +1,40 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 
 {% block meta %}
     <title>Register</title>
+    <style>
+        .bg-custom-navy {
+            background-color: #000435;
+        }
+    </style>
 {% endblock meta %}
 
 {% block content %}
 
 <div class="min-h-screen flex flex-col items-center justify-start mt-32">
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-xl w-full"> <!-- Increase max-w-xl to make the div wider -->
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md w-full"> 
         <h1 class="text-2xl mb-4">Register</h1>
 
         <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}
+            {% for hidden_field in form.hidden_fields %}
+                {{ hidden_field }}
+            {% endfor %}
+
+            {% for field in form.visible_fields %}
+                <div class="form-group px-3">
+                    {{ field.errors }}
+                    <label for="{{ field.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">
+                        {{ field.label }}
+                    </label>
+                    <div class="py-1"></div>
+                    {% render_field field class="form-control form-input border border-gray-300 rounded-md py-2 px-3" placeholder=field.label %}
+                    <div class="py-2"></div>
+                </div>
+            {% endfor %}
             <div class="flex items-center justify-between mt-4">
-                <input type="submit" name="submit" value="Daftar" class="px-4 py-2 bg-blue-800 hover:bg-blue-900 text-white rounded-md font-semibold transition duration-300 ease-in-out">
+                <input type="submit" name="submit" value="Register" class="px-4 py-2 bg-custom-navy hover:bg-blue-800 text-white rounded-md font-semibold transition duration-300 ease-in-out">
             </div>
         </form>
 
@@ -25,6 +45,7 @@
                 {% endfor %}
             </ul>
         {% endif %}
+        <p class="text-gray-600 text-sm mt-4">Already have an account? <a href="{% url 'main:login' %}" class="text-blue-500">Login now</a></p>
     </div>
 </div>
 

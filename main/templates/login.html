@@ -2,11 +2,16 @@
 
 {% block meta %}
     <title>Login</title>
+    <style>
+        .bg-custom-navy {
+            background-color: #000435;
+        }
+    </style>
 {% endblock meta %}
 
 {% block content %}
 
-<div class="min-h-screen flex flex-col items-center justify-start mt-32"> <!-- Use flex-col and justify-start -->
+<div class="min-h-screen flex flex-col items-center justify-start mt-32"> 
     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-md w-full">
         <h1 class="text-2xl mb-4">Login</h1>
 
@@ -23,7 +28,9 @@
             </div>
 
             <div class="flex items-center justify-between">
-                <button class="btn login_btn" type="submit">Login</button>
+                <button class="bg-custom-navy hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Login
+                </button>
             </div>
         </form>
 
@@ -35,7 +42,7 @@
             </ul>
         {% endif %}
 
-        <p class="text-gray-600 text-sm mt-4">Don't have an account yet? <a href="{% url 'main:register' %}" class="text-blue-500">Register Now</a></p>
+        <p class="text-gray-600 text-sm mt-4">Don't have an account yet? <a href="{% url 'main:register' %}" class="text-blue-500">Register now</a></p>
     </div>
 </div>
 

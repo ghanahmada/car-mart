@@ -32,6 +32,8 @@
         </div>
         
         <button type="submit" class="bg-custom-navy hover:bg-blue-800 shadow-md text-white px-4 py-2 mt-4 rounded-lg cursor-pointer">Add Item</button>
+        <p class="text-gray-600 text-sm mt-4">No need to add another item? <a href="{% url 'main:show_main' %}" class="text-blue-500">Back</a></p>
     </div>
 </form>
+
 {% endblock %}
