@@ -1,7 +1,28 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block meta %}
+    <link rel="stylesheet" href="{% static 'main/css/styles.css' %}">
+    <style>
+    .bg-custom-navy {
+        background-color: #000435;
+        }
+    </style>
+{% endblock meta %}
+
 
 {% block content %} 
+<style>
+    .bg-custom-navy {
+        background-color: #000435;
+        }
+    </style>
+<!-- <style>
+    .bg-custom-navy {
+        background-color: #000435;
+        }
+    </style> -->
 <nav class="bg-custom-navy text-white py-3 px-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold ml-2">Car Mart</h1>
     <div class="flex items-center gap-4">

@@ -9,6 +9,201 @@
 **Link aplikasi**: *https://car-mart.adaptable.app/main/* 
 
 
+## Tugas 6
+### Jelaskan perbedaan antara asynchronous programming dengan synchronous programming.
+Asynchronous programming dan synchronous programming adalah dua pendekatan utama dalam pengelolaan tugas di dalam program komputer. Synchronous programming menjalankan tugas secara berurutan, satu per satu, yang membuat program terkadang terasa lambat karena harus menunggu tugas-tugas yang memakan waktu. Sebaliknya, asynchronous programming memungkinkan eksekusi tugas-tugas secara bersamaan tanpa memblokir program utama, meningkatkan responsivitas dan efisiensi aplikasi terutama ketika menangani operasi I/O yang membutuhkan waktu. Dengan menggunakan callback functions, promises, atau async/await syntax, program dapat melanjutkan eksekusi tugas lainnya sambil menunggu hasil dari tugas-tugas asinkron.
+
+Dalam kesimpulan, pemilihan antara asynchronous dan synchronous programming tergantung pada kebutuhan spesifik aplikasi. Asynchronous programming sangat cocok untuk aplikasi yang memerlukan responsivitas tinggi dan efisiensi, terutama saat menangani tugas-tugas I/O yang memakan waktu. Sementara itu, synchronous programming masih relevan dalam kasus-kasus di mana urutan eksekusi tugas adalah kritis, dan kompleksitas manajemen tugas tidak menjadi masalah. Keputusan bijak dalam pemilihan pendekatan ini akan memastikan bahwa aplikasi berjalan efisien dan responsif sesuai dengan kebutuhan penggunaannya.
+
+### Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
+Paradigma pemrograman event-driven mengacu pada pendekatan di mana eksekusi program terutama ditentukan oleh peristiwa-peristiwa (events) yang terjadi selama program berjalan. Sebagai contoh, dalam konteks JavaScript dan AJAX, ketika pengguna melakukan tindakan tertentu pada antarmuka pengguna (seperti mengklik tombol atau mengisi formulir), peristiwa ini memicu tindakan (event), yang kemudian dapat mengeksekusi fungsi atau serangkaian instruksi terkait.
+
+Penerapan pada aplikasi ini adalah dalam fungsi `decrementProduct(event, ${item.pk})`, event mewakili objek event yang memicu fungsi ini, sementara ${item.pk} adalah parameter yang mewakili nilai kunci produk. Ketika tombol "Decrement" ditekan, fungsi ini dapat mengurangi jumlah produk terkait dengan kunci produk yang diberikan, dan kemudian memperbarui tampilan secara dinamis tanpa perlu me-refresh halaman.
+
+### Jelaskan penerapan asynchronous programming pada AJAX.
+Dalam konteks AJAX, asynchronous programming digunakan untuk mengambil data dari server tanpa memerlukan refresh halaman web. Dalam pendekatan ini, program mengirimkan permintaan ke server dan melanjutkan eksekusi tanpa menunggu respon. Setelah server mengirimkan data balasan, program akan menjalankan fungsi atau kode yang telah ditetapkan sebelumnya untuk menanggapi data tersebut. Dengan menggunakan asynchronous programming pada AJAX, aplikasi web dapat mengambil data dengan cepat dan responsif, meningkatkan pengalaman pengguna tanpa perlu memuat ulang seluruh halaman. Ini tidak hanya membuat pengguna lebih puas, tetapi juga meningkatkan kinerja keseluruhan aplikasi web.
+
+### Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
+**Fetch API:**
+
+1. Ringan dan Modern: Fetch API adalah API bawaan pada JavaScript yang menyediakan antarmuka untuk melakukan permintaan HTTP. Ini merupakan metode modern dan lebih ringan jika dibandingkan dengan menggunakan library eksternal.
+2. Promise-Based: Fetch API mengembalikan Promise, yang membuatnya mudah diintegrasikan dengan async/await untuk mengelola operasi asynchronous dengan cara yang bersih dan mudah dibaca.
+3. Lebih Bersifat Modular: Fetch API memungkinkan pengembang membangun fungsionalitas kustom sesuai kebutuhan tanpa membawa beban library eksternal yang mungkin tidak digunakan sepenuhnya.
+
+**jQuery:**
+
+1. Legacy dan Heavier: jQuery merupakan library JavaScript yang luas dan menyediakan banyak fungsi dan utilitas. Namun, karena kekayaan fitur ini, jQuery cenderung lebih berat daripada Fetch API, terutama jika aplikasi hanya membutuhkan fungsi AJAX sederhana.
+2. Callback-Based: Fungsi AJAX di jQuery menggunakan pendekatan callback-based, yang dapat menjadi kurang mudah dipahami dan dipelihara terutama dalam aplikasi kompleks dengan banyak panggilan AJAX bersarang.
+3. Cross-Browser Compatibility: jQuery telah mengatasi sebagian besar masalah kompatibilitas browser, memastikan bahwa kode akan berfungsi seragam di berbagai jenis browser.
+
+Pilihan antara Fetch API dan jQuery tergantung pada kebutuhan proyek dan preferensi pengembang. Jika Anda bekerja pada proyek yang membutuhkan pendekatan modern, lebih bersifat modular, dan memperhatikan efisiensi dan ukuran aplikasi, maka menggunakan Fetch API adalah pilihan yang baik. Penggunaan Fetch API memungkinkan pengembang untuk membangun aplikasi yang lebih ringan, efisien, dan mudah dikelola, terutama jika proyek hanya memerlukan operasi AJAX sederhana.
+
+### Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+#### 1. AJAX GET
+Saya menghapus kode cards sebelumnya dan membuat tag div dengan id `item_container`. Saya mengubah kode html cards menjadi berikut.
+
+```html
+<div id="item_container" class="container-fluid"></div>
+```
+```javascript
+async function getItems() {
+            return fetch("{% url 'main:get_item_json' %}").then((res) => res.json())
+        }
+
+        async function refreshProducts() {
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            const container = document.getElementById("item_container");
+            container.innerHTML = "";  // Clear the current content.
+            
+            const products = await getItems();
+            
+            let htmlString = '<div class="row">';
+
+            
+            products.forEach((item, index) => {
+                const cardClass = (index === products.length - 1) ? "text-bg-primary" : "text-bg-light";
+                htmlString += `
+                    <div class="col-md-4">
+                        <div class="card m-3" md:w-1/2 lg:w-1/3 xl:w-1/4>
+                            <div class="card ${cardClass} text-left shadow p-3 rounded">
+                                <div class="card-body">
+                                    <div class="flex justify-between items-center gap-4">
+                                        <div class="flex-none"><h5 class="card-title text-sm md:text-base lg:text-lg xl:text-xl"><b>${item.fields.name}</b></h5></div>
+                                        <div class="flex-none text-right"><h5 class="card-title text-sm md:text-base lg:text-lg xl:text-xl"><b>${item.fields.category}</b></h5></div>
+                                    </div>
+                                    <p class="card-text mb-2 text-sm md:text-base lg:text-lg xl:text-xl">Price: ${item.fields.price}</p>
+                                    <p class="card-text mb-2 text-sm md:text-base lg:text-lg xl:text-xl">Amount: <span id="itemAmount${item.pk}">${item.fields.amount}</span></p>
+                                    <p class="card-text mb-2 text-sm md:text-base lg:text-lg xl:text-xl">${item.fields.description}</p>
+                                    <div class="flex justify-between items-center gap-4">
+
+
+                                        <div class="flex-grow text-center"> 
+                                            <button id="decrementProduct" title="Decrement" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded" onclick="decrementProduct(event, ${item.pk})">
+                                                -
+                                            </button>
+                                        </div>
+
+                                        <div class="flex-grow text-center"> 
+                                            <button id="incrementProduct" title="Increment" class="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-4 rounded" onclick="incrementProduct(event, ${item.pk})">
+                                                +
+                                            </button>
+                                        </div>
+
+                                        <div class="flex-none text-right">
+                                            <button title="Delete" class="custom-button-delete bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-4 rounded" onclick="deleteProduct(${item.pk})">
+                                                x
+                                            </button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="card-footer text-body-secondary">
+                                    ${item.fields.date_added}
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+
+            htmlString += '</div>';
+            container.innerHTML = htmlString;
+            updateItemsCount(products.length);
+            console.log(products[0].fields.amount);
+
+        }
+```
+
+#### 2. AJAX POST
+Saya membuat modal berikut untuk menambahkan item
+```html
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form" onsubmit="return false;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="col-form-label">Price:</label>
+                            <input type="number" class="form-control" id="price" name="price">
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="col-form-label">Description:</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="genre" class="col-form-label">Category:</label>
+                            <input type="text" class="form-control" id="category" name="category">
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="col-form-label">Amount:</label>
+                            <input type="number" class="form-control" id="amount" name="amount">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+```
+Untuk mengaktifkan modal di atas, saya membuat function berikut
+```javascript
+function addProduct() {
+            fetch("{% url 'main:add_item_ajax' %}", {
+                method: "POST",
+                body: new FormData(document.querySelector('#form'))
+            })
+            .then(refreshProducts)
+
+            document.getElementById("form").reset()
+            return false
+        }
+```
+Untuk menghubungkannya dengan `view`, saya menambahkan kode berikut pada `urls.py` di root main.
+```python
+path('create-item-ajax/', add_item_ajax, name='add_item_ajax'),
+```
+
+#### 3. Melakukan perintah `collectstatic`
+Masukkan `STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') `pada file `settings.py`, tepat di bawah baris `STATIC_URL = '/static/'`. Setelah itu, saya membuka command prompt (cmd) dan menjalankan perintah `python manage.py collectstatics`.
+
+#### BONUS
+pada bagian bonus, saya mengimplementasi AJAX DELETE dengan tambahan modal ketika user ingin menghapus item. Modal ini akan mengonfirmasi untuk menghapus item atau tidak.
+
+```javascript
+function deleteProduct(itemId) {
+            var myModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            myModal.show();
+
+            document.getElementById("confirmDeleteBtn").addEventListener("click", function() {
+                fetch(`delete-item-ajax/${itemId}/`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRFToken": document.querySelector('input[name="csrfmiddlewaretoken"]').value,
+                    },
+                })
+                .then(refreshProducts);
+
+                myModal.hide();
+            });
+        }
+
+        document.getElementById("button_add").onclick = addProduct
+        refreshProducts()
+```
+
+
 ## Tugas 5
 ### Jelaskan manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya.
 
