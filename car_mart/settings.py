@@ -10,10 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env()
 
 
 # Quick-start development settings - unsuitable for production
@@ -21,6 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-by3a+w64t2+e4%-75@&gfx7roz9f-yw5ml9gr#nh=89thh)z1n"
+PRODUCTION = env.bool('PRODUCTION', False)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,7 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "main",
-    "widget_tweaks"
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
@@ -82,6 +87,12 @@ DATABASES = {
     }
 }
 
+if PRODUCTION:
+    DATABASES = {
+        'default': env.db('DATABASE_URL')
+    }
+    DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -117,7 +128,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
+
+STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
