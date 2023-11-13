@@ -29,7 +29,7 @@ def show_main(request):
     }
     return render(request, "main.html", context)
 
-
+# create item
 def create_item(request):       
     form = ItemForm(request.POST or None)
 
@@ -50,7 +50,7 @@ def show_xml(request):
 
 def show_json(request):
     data = Item.objects.all()
-    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    return HttpResponse(serializers.serialize("json", data))
 
 
 def show_xml_by_id(request, id):
@@ -126,7 +126,8 @@ def delete_item(request, id):
 def get_item_json(request):
     product_item = Item.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize('json', product_item))
-
+    # data = Item.objects.all()
+    # return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 @csrf_exempt
 def add_item_ajax(request):

@@ -10,3 +10,7 @@ class Item(models.Model):
     category = models.CharField(max_length=50)
     description = models.TextField()
     date_added = models.DateField(auto_now_add=True)
+
+
+
+
