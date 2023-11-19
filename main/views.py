@@ -1,3 +1,4 @@
+import json
 import datetime
 
 from django.shortcuts import render
@@ -169,4 +170,24 @@ def decrement_item_ajax(request, id):
     item.amount -= 1
     item.save()
     return HttpResponse(b"DELETED", status=201)
+
+
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_product = Item.objects.create(
+            user = request.user,
+            name = data["name"],
+            price = int(data["price"]),
+            description = data["description"]
+        )
+
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
     
