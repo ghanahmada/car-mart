@@ -3,7 +3,7 @@ from main.views import show_main, create_item, show_xml, show_json, show_xml_by_
 from main.views import register, login_user, logout_user
 from main.views import increment_item, decrement_item, delete_item
 from main.views import get_item_json, add_item_ajax, delete_item_ajax, increment_item_ajax, decrement_item_ajax
-from main.views import create_product_flutter
+from main.views import create_product_flutter, show_json_user
 
 app_name = 'main'
 
@@ -26,5 +26,5 @@ urlpatterns = [
     path('increment-item-ajax/<int:id>/', increment_item_ajax, name='increment_item_ajax'),
     path('decrement-item-ajax/<int:id>/', decrement_item_ajax, name='decrement_item_ajax'),
     path('create-flutter/', create_product_flutter, name='create_product_flutter'),
-
+    path('json-user/', show_json_user, name='show_json_user'),
 ]
