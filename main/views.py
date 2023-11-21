@@ -14,7 +14,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -67,6 +67,7 @@ def show_json_by_id(request, id):
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 
+@csrf_exempt
 def register(request):
     form = UserCreationForm()
 
@@ -79,7 +80,7 @@ def register(request):
     context = {'form':form}
     return render(request, 'register.html', context)
 
-
+@csrf_exempt
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
