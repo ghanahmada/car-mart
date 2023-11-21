@@ -177,6 +177,7 @@ def decrement_item_ajax(request, id):
 
 @csrf_exempt
 def create_product_flutter(request):
+    print(request.method)
     if request.method == 'POST':
         
         data = json.loads(request.body)
@@ -185,7 +186,9 @@ def create_product_flutter(request):
             user = request.user,
             name = data["name"],
             price = int(data["price"]),
-            description = data["description"]
+            description = data["description"],
+            category = data["category"],
+            amount = int(data["amount"]),
         )
 
         new_product.save()
